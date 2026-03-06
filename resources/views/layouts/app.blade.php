@@ -6,6 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name') }} - {{ $title ?? 'Dashboard' }}</title>
+    <style>
+        /* Safe area para PWA em iOS/Android */
+        .safe-top {
+            padding-top: env(safe-area-inset-top, 0px);
+        }
+
+        body {
+            padding-top: env(safe-area-inset-top, 0px);
+        }
+    </style>
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -42,6 +52,7 @@
     <!-- Sidebar -->
     <aside
         class="fixed inset-y-0 left-0 z-30 w-64 bg-slate-900 border-r border-slate-800 flex flex-col transform transition-transform duration-300 lg:translate-x-0"
+        style="padding-top: env(safe-area-inset-top, 0px);"
         :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'">
 
         <!-- Logo -->
@@ -154,9 +165,10 @@
     <div class="lg:pl-64 flex flex-col min-h-screen">
 
         <!-- Topbar Mobile -->
-        <header
-            class="lg:hidden sticky top-0 z-10 bg-slate-900 border-b border-slate-800 px-4 py-3 flex items-center gap-4">
-            <button @click="sidebarOpen = true" class="text-slate-400 hover:text-white">
+        <header class="lg:hidden sticky top-0 z-10 bg-slate-900 border-b border-slate-800 flex items-center gap-4 px-4"
+            style="padding-top: calc(env(safe-area-inset-top, 0px) + 0.75rem); padding-bottom: 0.75rem;">
+            <button @click="sidebarOpen = true" class="text-slate-400 hover:text-white p-1 -ml-1 touch-manipulation"
+                style="min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center;">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
@@ -223,7 +235,7 @@
         // Registro do Service Worker
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js').catch(() => {  });
+                navigator.serviceWorker.register('/sw.js').catch(() => { });
             });
         }
 
