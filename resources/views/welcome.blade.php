@@ -73,15 +73,15 @@
             <div
                 class="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-900/50 border border-emerald-700/50 rounded-full text-emerald-300 text-xs font-medium mb-6">
                 <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full"></span>
-                Controle financeiro completo
+                Controle financeiro e de veículos
             </div>
             <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white mb-6 leading-tight">
                 Suas finanças sob
                 <span class="text-emerald-400">controle total</span>
             </h1>
             <p class="text-lg sm:text-xl text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-                Gerencie gastos fixos, cartões de crédito com parcelas, combustível, IPVA, IPTU e muito mais.
-                Tudo em um lugar, tanto para sua vida pessoal quanto para o seu negócio.
+                Gerencie gastos fixos, cartões de crédito, veículos completos, IPVA, IPTU e muito mais.
+                Tudo em um lugar, para sua vida pessoal e para o seu negócio.
             </p>
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <a href="{{ route('register') }}"
@@ -132,15 +132,20 @@
 
             <div
                 class="bg-slate-900 border border-slate-800 rounded-2xl p-6 hover:border-emerald-700/50 transition-colors">
-                <div class="w-10 h-10 bg-yellow-900/50 rounded-xl flex items-center justify-center mb-4">
-                    <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-10 h-10 bg-orange-900/50 rounded-xl flex items-center justify-center mb-4">
+                    <svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0zM13 16V6a1 1 0 00-1-1H5a1 1 0 00-1 1v10m0 0H3m10 0h1m0-5l2-3h3l2 3m-8 5h8" />
                     </svg>
                 </div>
-                <h3 class="font-bold text-white text-lg mb-2">Combustível</h3>
-                <p class="text-slate-400 text-sm leading-relaxed">Registre cada abastecimento com litros, valor e
-                    quilometragem. Acompanhe o gasto mensal com combustível.</p>
+                <h3 class="font-bold text-white text-lg mb-2">Gestão de Veículos</h3>
+                <p class="text-slate-400 text-sm leading-relaxed mb-3">Controle total do seu veículo em um só lugar: abastecimentos, manutenções com alertas, despesas como multas e seguro. Veja o consumo médio e o custo real por km.</p>
+                <div class="flex flex-wrap gap-1.5">
+                    <span class="text-xs px-2 py-0.5 bg-slate-800 text-slate-400 rounded-full">Abastecimentos</span>
+                    <span class="text-xs px-2 py-0.5 bg-slate-800 text-slate-400 rounded-full">Manutenções</span>
+                    <span class="text-xs px-2 py-0.5 bg-slate-800 text-slate-400 rounded-full">Multas e seguro</span>
+                    <span class="text-xs px-2 py-0.5 bg-emerald-900/50 text-emerald-400 rounded-full">Consumo km/l</span>
+                </div>
             </div>
 
             <div
