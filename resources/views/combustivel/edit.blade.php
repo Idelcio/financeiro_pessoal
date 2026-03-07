@@ -13,6 +13,20 @@
             <form method="POST" action="{{ route('combustivel.update', $combustivel) }}" class="space-y-5">
                 @csrf @method('PATCH')
 
+                @if($veiculos->isNotEmpty())
+                <div>
+                    <label class="block text-sm font-medium text-slate-300 mb-1.5">Veículo</label>
+                    <select name="veiculo_id" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500">
+                        <option value="">— Sem veículo vinculado —</option>
+                        @foreach($veiculos as $v)
+                            <option value="{{ $v->id }}" {{ old('veiculo_id', $combustivel->veiculo_id) == $v->id ? 'selected' : '' }}>
+                                {{ $v->nome }}{{ $v->placa ? ' (' . strtoupper($v->placa) . ')' : '' }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                @endif
+
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-slate-300 mb-1.5">Data *</label>

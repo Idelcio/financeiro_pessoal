@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Combustivel;
+use App\Models\Veiculo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,12 +27,15 @@ class CombustivelController extends Controller
 
     public function create()
     {
-        return view('combustivel.create');
+        $veiculos = Veiculo::where('user_id', Auth::id())->where('ativo', true)->get();
+        $veiculoSelecionado = request('veiculo_id');
+        return view('combustivel.create', compact('veiculos', 'veiculoSelecionado'));
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
+            'veiculo_id'         => 'nullable|exists:veiculos,id',
             'data_abastecimento' => 'required|date',
             'tipo_combustivel'   => 'required|string',
             'litros'             => 'nullable|numeric|min:0',
@@ -43,8 +47,9 @@ class CombustivelController extends Controller
             'observacao'         => 'nullable|string',
         ]);
 
-        Combustivel::create([
+        $combustivel = Combustivel::create([
             'user_id'              => Auth::id(),
+            'veiculo_id'           => $data['veiculo_id'] ?? null,
             'data_abastecimento'   => $data['data_abastecimento'],
             'tipo_combustivel'     => $data['tipo_combustivel'],
             'litros'               => $data['litros'] ?? null,
@@ -56,13 +61,27 @@ class CombustivelController extends Controller
             'observacao'           => $data['observacao'] ?? null,
         ]);
 
+        // Atualiza km do veículo se informado e maior que o atual
+        if ($combustivel->veiculo_id && $combustivel->km_atual) {
+            $veiculo = Veiculo::find($combustivel->veiculo_id);
+            if ($veiculo && $combustivel->km_atual > ($veiculo->km_atual ?? 0)) {
+                $veiculo->update(['km_atual' => $combustivel->km_atual]);
+            }
+        }
+
+        // Redireciona de volta para o veículo se veio de lá
+        if ($combustivel->veiculo_id) {
+            return redirect()->route('veiculos.show', $combustivel->veiculo_id)->with('success', 'Abastecimento registrado!');
+        }
+
         return redirect()->route('combustivel.index')->with('success', 'Abastecimento registrado!');
     }
 
     public function edit(Combustivel $combustivel)
     {
         abort_if($combustivel->user_id !== Auth::id(), 403);
-        return view('combustivel.edit', compact('combustivel'));
+        $veiculos = Veiculo::where('user_id', Auth::id())->where('ativo', true)->get();
+        return view('combustivel.edit', compact('combustivel', 'veiculos'));
     }
 
     public function update(Request $request, Combustivel $combustivel)
@@ -70,6 +89,7 @@ class CombustivelController extends Controller
         abort_if($combustivel->user_id !== Auth::id(), 403);
 
         $data = $request->validate([
+            'veiculo_id'         => 'nullable|exists:veiculos,id',
             'data_abastecimento' => 'required|date',
             'tipo_combustivel'   => 'required|string',
             'litros'             => 'nullable|numeric|min:0',
@@ -82,6 +102,7 @@ class CombustivelController extends Controller
         ]);
 
         $combustivel->update([
+            'veiculo_id'           => $data['veiculo_id'] ?? null,
             'data_abastecimento'   => $data['data_abastecimento'],
             'tipo_combustivel'     => $data['tipo_combustivel'],
             'litros'               => $data['litros'] ?? null,
@@ -92,6 +113,11 @@ class CombustivelController extends Controller
             'tipo'                 => $data['tipo'],
             'observacao'           => $data['observacao'] ?? null,
         ]);
+
+        // Redireciona de volta para o veículo se vinculado
+        if ($combustivel->veiculo_id) {
+            return redirect()->route('veiculos.show', $combustivel->veiculo_id)->with('success', 'Abastecimento atualizado!');
+        }
 
         return redirect()->route('combustivel.index')->with('success', 'Abastecimento atualizado!');
     }
