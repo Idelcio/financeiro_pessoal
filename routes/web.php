@@ -12,6 +12,7 @@ use App\Http\Controllers\GastoFixoPagamentoController;
 use App\Http\Controllers\ImpostoController;
 use App\Http\Controllers\ImpostoParcelaController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\AdminController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -56,4 +57,11 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('categorias', CategoriaController::class)->except(['show', 'create', 'edit']);
 });
 
-require __DIR__.'/auth.php';
+// Admin
+Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', [AdminController::class, 'index'])->name('index');
+    Route::patch('/users/{user}/toggle-admin', [AdminController::class, 'toggleAdmin'])->name('toggle-admin');
+    Route::delete('/users/{user}', [AdminController::class, 'destroy'])->name('destroy');
+});
+
+require __DIR__ . '/auth.php';
