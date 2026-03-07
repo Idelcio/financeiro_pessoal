@@ -12,6 +12,9 @@ use App\Http\Controllers\GastoFixoPagamentoController;
 use App\Http\Controllers\ImpostoController;
 use App\Http\Controllers\ImpostoParcelaController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\VeiculoController;
+use App\Http\Controllers\ManutencaoController;
+use App\Http\Controllers\DespesaVeiculoController;
 use App\Http\Controllers\Admin\AdminController;
 use Illuminate\Support\Facades\Route;
 
@@ -55,6 +58,23 @@ Route::middleware(['auth'])->group(function () {
 
     // Categorias
     Route::resource('categorias', CategoriaController::class)->except(['show', 'create', 'edit']);
+
+    // Veículos
+    Route::resource('veiculos', VeiculoController::class);
+
+    // Manutenções (aninhadas ao veículo)
+    Route::get('veiculos/{veiculo}/manutencoes/create', [ManutencaoController::class, 'create'])->name('veiculos.manutencoes.create');
+    Route::post('veiculos/{veiculo}/manutencoes', [ManutencaoController::class, 'store'])->name('veiculos.manutencoes.store');
+    Route::get('veiculos/{veiculo}/manutencoes/{manutencao}/edit', [ManutencaoController::class, 'edit'])->name('veiculos.manutencoes.edit');
+    Route::put('veiculos/{veiculo}/manutencoes/{manutencao}', [ManutencaoController::class, 'update'])->name('veiculos.manutencoes.update');
+    Route::delete('veiculos/{veiculo}/manutencoes/{manutencao}', [ManutencaoController::class, 'destroy'])->name('veiculos.manutencoes.destroy');
+
+    // Despesas do veículo (aninhadas ao veículo)
+    Route::get('veiculos/{veiculo}/despesas/create', [DespesaVeiculoController::class, 'create'])->name('veiculos.despesas.create');
+    Route::post('veiculos/{veiculo}/despesas', [DespesaVeiculoController::class, 'store'])->name('veiculos.despesas.store');
+    Route::get('veiculos/{veiculo}/despesas/{despesa}/edit', [DespesaVeiculoController::class, 'edit'])->name('veiculos.despesas.edit');
+    Route::put('veiculos/{veiculo}/despesas/{despesa}', [DespesaVeiculoController::class, 'update'])->name('veiculos.despesas.update');
+    Route::delete('veiculos/{veiculo}/despesas/{despesa}', [DespesaVeiculoController::class, 'destroy'])->name('veiculos.despesas.destroy');
 });
 
 // Admin

@@ -11,13 +11,18 @@ class Imposto extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'user_id', 'nome', 'tipo', 'ano', 'valor_total_centavos',
+        'user_id', 'veiculo_id', 'nome', 'tipo', 'ano', 'valor_total_centavos',
         'total_parcelas', 'descricao_bem', 'tipo_uso', 'observacao',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function veiculo()
+    {
+        return $this->belongsTo(Veiculo::class);
     }
 
     public function parcelas()

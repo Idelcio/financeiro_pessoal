@@ -13,7 +13,7 @@ class Combustivel extends Model
     protected $table = 'combustivel';
 
     protected $fillable = [
-        'user_id', 'data_abastecimento', 'tipo_combustivel', 'litros',
+        'user_id', 'veiculo_id', 'data_abastecimento', 'tipo_combustivel', 'litros',
         'valor_total_centavos', 'valor_litro_centavos', 'km_atual',
         'posto', 'tipo', 'observacao',
     ];
@@ -23,6 +23,11 @@ class Combustivel extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function veiculo()
+    {
+        return $this->belongsTo(Veiculo::class);
     }
 
     public function getValorTotalReaisAttribute(): float
