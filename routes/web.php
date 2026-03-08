@@ -41,7 +41,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('combustivel', CombustivelController::class)->except(['show']);
 
     // Cartoes
-    Route::resource('cartoes', CartaoController::class);
+    Route::resource('cartoes', CartaoController::class)->parameters(['cartoes' => 'cartao']);
     Route::get('cartoes/{cartao}/gastos/create', [CartaoGastoController::class, 'create'])->name('cartoes.gastos.create');
     Route::post('cartoes/{cartao}/gastos', [CartaoGastoController::class, 'store'])->name('cartoes.gastos.store');
     Route::delete('cartoes-gastos/{cartaoGasto}', [CartaoGastoController::class, 'destroy'])->name('cartoes.gastos.destroy');
