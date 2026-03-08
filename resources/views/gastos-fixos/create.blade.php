@@ -1,5 +1,5 @@
 <x-app-layout>
-    @slot('title')Novo Gasto Fixo@endslot
+    <x-slot name="title">Novo Gasto Fixo</x-slot>
 
     <div class="max-w-2xl">
         <div class="flex items-center gap-3 mb-8">

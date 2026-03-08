@@ -1,5 +1,5 @@
 <x-app-layout>
-    @slot('title')Registrar Abastecimento@endslot
+    <x-slot name="title">Registrar Abastecimento</x-slot>
 
     <div class="max-w-2xl">
         <div class="flex items-center gap-3 mb-8">

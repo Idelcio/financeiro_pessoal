@@ -1,5 +1,5 @@
 <x-app-layout>
-    @slot('title'){{ $imposto->nome }} - {{ strtoupper($imposto->tipo) }}@endslot
+    <x-slot name="title">{{ $imposto->nome }} - {{ strtoupper($imposto->tipo) }}</x-slot>
 
     <div class="max-w-3xl">
         <div class="flex items-center gap-3 mb-8">

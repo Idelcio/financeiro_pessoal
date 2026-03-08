@@ -1,5 +1,5 @@
 <x-app-layout>
-    @slot('title'){{ $cartao->nome }}@endslot
+    <x-slot name="title">{{ $cartao->nome }}</x-slot>
 
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <div class="flex items-center gap-3">
