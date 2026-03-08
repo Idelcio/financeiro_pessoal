@@ -17,7 +17,8 @@ class GastoAvulso extends Model
         'valor_centavos', 'data', 'tipo', 'observacao',
     ];
 
-    protected $casts = ['data' => 'date'];
+    protected $casts = [
+        'user_id' => 'integer','data' => 'date'];
 
     public function user()
     {

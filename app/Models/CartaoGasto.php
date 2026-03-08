@@ -15,7 +15,8 @@ class CartaoGasto extends Model
         'total_parcelas', 'data_compra', 'categoria', 'tipo', 'observacao',
     ];
 
-    protected $casts = ['data_compra' => 'date'];
+    protected $casts = [
+        'user_id' => 'integer','data_compra' => 'date'];
 
     public function cartao()
     {

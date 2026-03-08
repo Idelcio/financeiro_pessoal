@@ -50,7 +50,7 @@ class GastoAvulsoController extends Controller
         // Garantir que a categoria pertence ao usuario
         if ($data['categoria_id']) {
             $cat = Categoria::find($data['categoria_id']);
-            if ($cat && $cat->user_id !== Auth::id()) {
+            if ($cat && $cat->user_id != Auth::id()) {
                 abort(403);
             }
         }
@@ -70,14 +70,14 @@ class GastoAvulsoController extends Controller
 
     public function edit(GastoAvulso $gastosAvulso)
     {
-        abort_if($gastosAvulso->user_id !== Auth::id(), 403);
+        abort_if($gastosAvulso->user_id != Auth::id(), 403);
         $categorias = Categoria::where('user_id', Auth::id())->get();
         return view('gastos-avulsos.edit', ['gasto' => $gastosAvulso, 'categorias' => $categorias]);
     }
 
     public function update(Request $request, GastoAvulso $gastosAvulso)
     {
-        abort_if($gastosAvulso->user_id !== Auth::id(), 403);
+        abort_if($gastosAvulso->user_id != Auth::id(), 403);
 
         $data = $request->validate([
             'descricao'    => 'required|string|max:255',
@@ -102,7 +102,7 @@ class GastoAvulsoController extends Controller
 
     public function destroy(GastoAvulso $gastosAvulso)
     {
-        abort_if($gastosAvulso->user_id !== Auth::id(), 403);
+        abort_if($gastosAvulso->user_id != Auth::id(), 403);
         $gastosAvulso->delete();
         return redirect()->route('gastos-avulsos.index')->with('success', 'Gasto removido!');
     }

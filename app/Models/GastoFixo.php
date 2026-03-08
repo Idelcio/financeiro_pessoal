@@ -17,7 +17,8 @@ class GastoFixo extends Model
         'dia_vencimento', 'tipo', 'ativo', 'observacao',
     ];
 
-    protected $casts = ['ativo' => 'boolean'];
+    protected $casts = [
+        'user_id' => 'integer','ativo' => 'boolean'];
 
     public function user()
     {

@@ -79,14 +79,14 @@ class CombustivelController extends Controller
 
     public function edit(Combustivel $combustivel)
     {
-        abort_if($combustivel->user_id !== Auth::id(), 403);
+        abort_if($combustivel->user_id != Auth::id(), 403);
         $veiculos = Veiculo::where('user_id', Auth::id())->where('ativo', true)->get();
         return view('combustivel.edit', compact('combustivel', 'veiculos'));
     }
 
     public function update(Request $request, Combustivel $combustivel)
     {
-        abort_if($combustivel->user_id !== Auth::id(), 403);
+        abort_if($combustivel->user_id != Auth::id(), 403);
 
         $data = $request->validate([
             'veiculo_id'         => 'nullable|exists:veiculos,id',
@@ -124,7 +124,7 @@ class CombustivelController extends Controller
 
     public function destroy(Combustivel $combustivel)
     {
-        abort_if($combustivel->user_id !== Auth::id(), 403);
+        abort_if($combustivel->user_id != Auth::id(), 403);
         $combustivel->delete();
         return redirect()->route('combustivel.index')->with('success', 'Abastecimento removido!');
     }

@@ -16,7 +16,8 @@ class GastoFixoPagamento extends Model
         'data_pagamento', 'mes_referencia', 'observacao',
     ];
 
-    protected $casts = ['data_pagamento' => 'date'];
+    protected $casts = [
+        'user_id' => 'integer','data_pagamento' => 'date'];
 
     public function gastoFixo()
     {

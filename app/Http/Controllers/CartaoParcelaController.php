@@ -10,7 +10,7 @@ class CartaoParcelaController extends Controller
 {
     public function pagar(Request $request, CartaoParcela $parcela)
     {
-        abort_if($parcela->user_id !== Auth::id(), 403);
+        abort_if($parcela->user_id != Auth::id(), 403);
 
         $data = $request->validate([
             'data_pagamento' => 'required|date',
@@ -26,7 +26,7 @@ class CartaoParcelaController extends Controller
 
     public function desfazer(CartaoParcela $parcela)
     {
-        abort_if($parcela->user_id !== Auth::id(), 403);
+        abort_if($parcela->user_id != Auth::id(), 403);
 
         $parcela->update([
             'pago'           => false,

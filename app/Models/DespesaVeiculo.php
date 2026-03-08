@@ -17,7 +17,8 @@ class DespesaVeiculo extends Model
         'valor_centavos', 'tipo_uso', 'observacao',
     ];
 
-    protected $casts = ['data' => 'date'];
+    protected $casts = [
+        'user_id' => 'integer','data' => 'date'];
 
     public static array $tipos = [
         'multa' => 'Multa',

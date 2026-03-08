@@ -18,7 +18,8 @@ class Combustivel extends Model
         'posto', 'tipo', 'observacao',
     ];
 
-    protected $casts = ['data_abastecimento' => 'date'];
+    protected $casts = [
+        'user_id' => 'integer','data_abastecimento' => 'date'];
 
     public function user()
     {

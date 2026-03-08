@@ -17,7 +17,8 @@ class Cartao extends Model
         'dia_fechamento', 'dia_vencimento', 'cor', 'tipo', 'ativo',
     ];
 
-    protected $casts = ['ativo' => 'boolean'];
+    protected $casts = [
+        'user_id' => 'integer','ativo' => 'boolean'];
 
     public function user()
     {

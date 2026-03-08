@@ -73,20 +73,20 @@ class ImpostoController extends Controller
 
     public function show(Imposto $imposto)
     {
-        abort_if($imposto->user_id !== Auth::id(), 403);
+        abort_if($imposto->user_id != Auth::id(), 403);
         $imposto->load('parcelas');
         return view('impostos.show', compact('imposto'));
     }
 
     public function edit(Imposto $imposto)
     {
-        abort_if($imposto->user_id !== Auth::id(), 403);
+        abort_if($imposto->user_id != Auth::id(), 403);
         return view('impostos.edit', compact('imposto'));
     }
 
     public function update(Request $request, Imposto $imposto)
     {
-        abort_if($imposto->user_id !== Auth::id(), 403);
+        abort_if($imposto->user_id != Auth::id(), 403);
 
         $data = $request->validate([
             'nome'          => 'required|string|max:255',
@@ -102,7 +102,7 @@ class ImpostoController extends Controller
 
     public function destroy(Imposto $imposto)
     {
-        abort_if($imposto->user_id !== Auth::id(), 403);
+        abort_if($imposto->user_id != Auth::id(), 403);
         $imposto->delete();
         return redirect()->route('impostos.index')->with('success', 'Imposto removido!');
     }

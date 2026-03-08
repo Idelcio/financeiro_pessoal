@@ -11,14 +11,14 @@ class ManutencaoController extends Controller
 {
     public function create(Veiculo $veiculo)
     {
-        abort_if($veiculo->user_id !== Auth::id(), 403);
+        abort_if($veiculo->user_id != Auth::id(), 403);
         $tipos = Manutencao::$tipos;
         return view('manutencoes.create', compact('veiculo', 'tipos'));
     }
 
     public function store(Request $request, Veiculo $veiculo)
     {
-        abort_if($veiculo->user_id !== Auth::id(), 403);
+        abort_if($veiculo->user_id != Auth::id(), 403);
 
         $data = $request->validate([
             'tipo'              => 'required|string',
@@ -58,7 +58,7 @@ class ManutencaoController extends Controller
 
     public function edit(Veiculo $veiculo, Manutencao $manutencao)
     {
-        abort_if($veiculo->user_id !== Auth::id(), 403);
+        abort_if($veiculo->user_id != Auth::id(), 403);
         abort_if($manutencao->veiculo_id !== $veiculo->id, 403);
         $tipos = Manutencao::$tipos;
         return view('manutencoes.edit', compact('veiculo', 'manutencao', 'tipos'));
@@ -66,7 +66,7 @@ class ManutencaoController extends Controller
 
     public function update(Request $request, Veiculo $veiculo, Manutencao $manutencao)
     {
-        abort_if($veiculo->user_id !== Auth::id(), 403);
+        abort_if($veiculo->user_id != Auth::id(), 403);
         abort_if($manutencao->veiculo_id !== $veiculo->id, 403);
 
         $data = $request->validate([
@@ -100,7 +100,7 @@ class ManutencaoController extends Controller
 
     public function destroy(Veiculo $veiculo, Manutencao $manutencao)
     {
-        abort_if($veiculo->user_id !== Auth::id(), 403);
+        abort_if($veiculo->user_id != Auth::id(), 403);
         abort_if($manutencao->veiculo_id !== $veiculo->id, 403);
         $manutencao->delete();
         return redirect()->route('veiculos.show', $veiculo)->with('success', 'Manutenção removida!');

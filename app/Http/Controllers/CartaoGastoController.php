@@ -13,13 +13,13 @@ class CartaoGastoController extends Controller
 {
     public function create(Cartao $cartao)
     {
-        abort_if($cartao->user_id !== Auth::id(), 403);
+        abort_if($cartao->user_id != Auth::id(), 403);
         return view('cartoes.gastos.create', compact('cartao'));
     }
 
     public function store(Request $request, Cartao $cartao)
     {
-        abort_if($cartao->user_id !== Auth::id(), 403);
+        abort_if($cartao->user_id != Auth::id(), 403);
 
         $data = $request->validate([
             'descricao'      => 'required|string|max:255',
@@ -63,7 +63,7 @@ class CartaoGastoController extends Controller
 
     public function destroy(CartaoGasto $cartaoGasto)
     {
-        abort_if($cartaoGasto->user_id !== Auth::id(), 403);
+        abort_if($cartaoGasto->user_id != Auth::id(), 403);
         $cartaoId = $cartaoGasto->cartao_id;
         $cartaoGasto->delete();
         return redirect()->route('cartoes.show', $cartaoId)->with('success', 'Gasto removido!');

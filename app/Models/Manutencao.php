@@ -19,6 +19,7 @@ class Manutencao extends Model
     ];
 
     protected $casts = [
+        'user_id' => 'integer',
         'data' => 'date',
         'proxima_data' => 'date',
         'alerta_enviado' => 'boolean',

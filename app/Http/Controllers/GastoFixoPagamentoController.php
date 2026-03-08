@@ -11,7 +11,7 @@ class GastoFixoPagamentoController extends Controller
 {
     public function store(Request $request, GastoFixo $gastoFixo)
     {
-        abort_if($gastoFixo->user_id !== Auth::id(), 403);
+        abort_if($gastoFixo->user_id != Auth::id(), 403);
 
         $data = $request->validate([
             'valor_pago'      => 'required|numeric|min:0.01',
@@ -39,7 +39,7 @@ class GastoFixoPagamentoController extends Controller
 
     public function destroy(GastoFixoPagamento $pagamento)
     {
-        abort_if($pagamento->user_id !== Auth::id(), 403);
+        abort_if($pagamento->user_id != Auth::id(), 403);
         $pagamento->delete();
         return back()->with('success', 'Pagamento removido!');
     }

@@ -11,14 +11,14 @@ class DespesaVeiculoController extends Controller
 {
     public function create(Veiculo $veiculo)
     {
-        abort_if($veiculo->user_id !== Auth::id(), 403);
+        abort_if($veiculo->user_id != Auth::id(), 403);
         $tipos = DespesaVeiculo::$tipos;
         return view('despesas_veiculo.create', compact('veiculo', 'tipos'));
     }
 
     public function store(Request $request, Veiculo $veiculo)
     {
-        abort_if($veiculo->user_id !== Auth::id(), 403);
+        abort_if($veiculo->user_id != Auth::id(), 403);
 
         $data = $request->validate([
             'tipo'       => 'required|string',
@@ -45,7 +45,7 @@ class DespesaVeiculoController extends Controller
 
     public function edit(Veiculo $veiculo, DespesaVeiculo $despesa)
     {
-        abort_if($veiculo->user_id !== Auth::id(), 403);
+        abort_if($veiculo->user_id != Auth::id(), 403);
         abort_if($despesa->veiculo_id !== $veiculo->id, 403);
         $tipos = DespesaVeiculo::$tipos;
         return view('despesas_veiculo.edit', compact('veiculo', 'despesa', 'tipos'));
@@ -53,7 +53,7 @@ class DespesaVeiculoController extends Controller
 
     public function update(Request $request, Veiculo $veiculo, DespesaVeiculo $despesa)
     {
-        abort_if($veiculo->user_id !== Auth::id(), 403);
+        abort_if($veiculo->user_id != Auth::id(), 403);
         abort_if($despesa->veiculo_id !== $veiculo->id, 403);
 
         $data = $request->validate([
@@ -79,7 +79,7 @@ class DespesaVeiculoController extends Controller
 
     public function destroy(Veiculo $veiculo, DespesaVeiculo $despesa)
     {
-        abort_if($veiculo->user_id !== Auth::id(), 403);
+        abort_if($veiculo->user_id != Auth::id(), 403);
         abort_if($despesa->veiculo_id !== $veiculo->id, 403);
         $despesa->delete();
         return redirect()->route('veiculos.show', $veiculo)->with('success', 'Despesa removida!');

@@ -10,7 +10,7 @@ class ImpostoParcelaController extends Controller
 {
     public function pagar(Request $request, ImpostoParcela $parcela)
     {
-        abort_if($parcela->user_id !== Auth::id(), 403);
+        abort_if($parcela->user_id != Auth::id(), 403);
 
         $data = $request->validate([
             'data_pagamento' => 'required|date',
@@ -26,7 +26,7 @@ class ImpostoParcelaController extends Controller
 
     public function desfazer(ImpostoParcela $parcela)
     {
-        abort_if($parcela->user_id !== Auth::id(), 403);
+        abort_if($parcela->user_id != Auth::id(), 403);
 
         $parcela->update([
             'pago'           => false,

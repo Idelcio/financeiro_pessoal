@@ -56,13 +56,13 @@ class GastoFixoController extends Controller
 
     public function edit(GastoFixo $gastosFixo)
     {
-        abort_if($gastosFixo->user_id !== Auth::id(), 403);
+        abort_if($gastosFixo->user_id != Auth::id(), 403);
         return view('gastos-fixos.edit', ['gasto' => $gastosFixo]);
     }
 
     public function update(Request $request, GastoFixo $gastosFixo)
     {
-        abort_if($gastosFixo->user_id !== Auth::id(), 403);
+        abort_if($gastosFixo->user_id != Auth::id(), 403);
 
         $data = $request->validate([
             'nome'           => 'required|string|max:255',
@@ -89,14 +89,14 @@ class GastoFixoController extends Controller
 
     public function destroy(GastoFixo $gastosFixo)
     {
-        abort_if($gastosFixo->user_id !== Auth::id(), 403);
+        abort_if($gastosFixo->user_id != Auth::id(), 403);
         $gastosFixo->delete();
         return redirect()->route('gastos-fixos.index')->with('success', 'Gasto fixo removido!');
     }
 
     public function show(GastoFixo $gastosFixo)
     {
-        abort_if($gastosFixo->user_id !== Auth::id(), 403);
+        abort_if($gastosFixo->user_id != Auth::id(), 403);
         $pagamentos = $gastosFixo->pagamentos()->orderByDesc('data_pagamento')->get();
         return view('gastos-fixos.show', ['gasto' => $gastosFixo, 'pagamentos' => $pagamentos]);
     }

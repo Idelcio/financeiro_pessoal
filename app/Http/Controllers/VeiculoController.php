@@ -43,7 +43,7 @@ class VeiculoController extends Controller
 
     public function show(Veiculo $veiculo)
     {
-        abort_if($veiculo->user_id !== Auth::id(), 403);
+        abort_if($veiculo->user_id != Auth::id(), 403);
 
         $veiculo->load(['combustiveis', 'manutencoes', 'despesas', 'impostos.parcelas']);
 
@@ -85,13 +85,13 @@ class VeiculoController extends Controller
 
     public function edit(Veiculo $veiculo)
     {
-        abort_if($veiculo->user_id !== Auth::id(), 403);
+        abort_if($veiculo->user_id != Auth::id(), 403);
         return view('veiculos.edit', compact('veiculo'));
     }
 
     public function update(Request $request, Veiculo $veiculo)
     {
-        abort_if($veiculo->user_id !== Auth::id(), 403);
+        abort_if($veiculo->user_id != Auth::id(), 403);
 
         $data = $request->validate([
             'nome'             => 'required|string|max:255',
@@ -113,7 +113,7 @@ class VeiculoController extends Controller
 
     public function destroy(Veiculo $veiculo)
     {
-        abort_if($veiculo->user_id !== Auth::id(), 403);
+        abort_if($veiculo->user_id != Auth::id(), 403);
         $veiculo->delete();
         return redirect()->route('veiculos.index')->with('success', 'Veículo removido!');
     }

@@ -15,6 +15,7 @@ class CartaoParcela extends Model
     ];
 
     protected $casts = [
+        'user_id' => 'integer',
         'pago' => 'boolean',
         'data_pagamento' => 'date',
     ];

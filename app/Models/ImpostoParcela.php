@@ -15,6 +15,7 @@ class ImpostoParcela extends Model
     ];
 
     protected $casts = [
+        'user_id' => 'integer',
         'pago' => 'boolean',
         'data_vencimento' => 'date',
         'data_pagamento' => 'date',

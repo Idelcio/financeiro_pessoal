@@ -52,7 +52,7 @@ class CartaoController extends Controller
 
     public function show(Cartao $cartao)
     {
-        abort_if($cartao->user_id !== Auth::id(), 403);
+        abort_if($cartao->user_id != Auth::id(), 403);
 
         $mes = request('mes', now()->format('Y-m'));
 
@@ -75,13 +75,13 @@ class CartaoController extends Controller
 
     public function edit(Cartao $cartao)
     {
-        abort_if($cartao->user_id !== Auth::id(), 403);
+        abort_if($cartao->user_id != Auth::id(), 403);
         return view('cartoes.edit', compact('cartao'));
     }
 
     public function update(Request $request, Cartao $cartao)
     {
-        abort_if($cartao->user_id !== Auth::id(), 403);
+        abort_if($cartao->user_id != Auth::id(), 403);
 
         $data = $request->validate([
             'nome'           => 'required|string|max:255',
@@ -110,7 +110,7 @@ class CartaoController extends Controller
 
     public function destroy(Cartao $cartao)
     {
-        abort_if($cartao->user_id !== Auth::id(), 403);
+        abort_if($cartao->user_id != Auth::id(), 403);
         $cartao->delete();
         return redirect()->route('cartoes.index')->with('success', 'Cartao removido!');
     }

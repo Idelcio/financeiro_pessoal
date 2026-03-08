@@ -15,7 +15,8 @@ class Veiculo extends Model
         'km_atual', 'tipo_combustivel', 'observacao', 'ativo',
     ];
 
-    protected $casts = ['ativo' => 'boolean'];
+    protected $casts = [
+        'user_id' => 'integer','ativo' => 'boolean'];
 
     public function user()
     {

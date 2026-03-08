@@ -34,7 +34,7 @@ class CategoriaController extends Controller
 
     public function update(Request $request, Categoria $categoria)
     {
-        abort_if($categoria->user_id !== Auth::id(), 403);
+        abort_if($categoria->user_id != Auth::id(), 403);
 
         $data = $request->validate([
             'nome'  => 'required|string|max:255',
@@ -49,7 +49,7 @@ class CategoriaController extends Controller
 
     public function destroy(Categoria $categoria)
     {
-        abort_if($categoria->user_id !== Auth::id(), 403);
+        abort_if($categoria->user_id != Auth::id(), 403);
         $categoria->delete();
         return back()->with('success', 'Categoria removida!');
     }
