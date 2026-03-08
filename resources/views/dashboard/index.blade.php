@@ -119,8 +119,8 @@
                     @foreach($parcelasMes->take(6) as $parcela)
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-4 py-3 border-b border-slate-800/50 last:border-0 last:pb-0">
                             <div class="pr-2">
-                                <p class="text-sm font-medium text-white line-clamp-1">{{ $parcela->cartaoGasto->descricao }}</p>
-                                <p class="text-xs text-slate-400 mt-0.5">{{ $parcela->cartaoGasto->cartao->nome }} - Parcela {{ $parcela->numero_parcela }}/{{ $parcela->cartaoGasto->total_parcelas }}</p>
+                                <p class="text-sm font-medium text-white line-clamp-1">{{ $parcela->cartaoGasto?->descricao ?? '—' }}</p>
+                                <p class="text-xs text-slate-400 mt-0.5">{{ $parcela->cartaoGasto?->cartao?->nome ?? '—' }} - Parcela {{ $parcela->numero_parcela }}/{{ $parcela->cartaoGasto?->total_parcelas ?? '?' }}</p>
                             </div>
                             <div class="flex items-center justify-between sm:justify-end gap-3 mt-1 sm:mt-0">
                                 <span class="text-sm font-medium text-slate-300">R$ {{ number_format($parcela->valor_centavos / 100, 2, ',', '.') }}</span>

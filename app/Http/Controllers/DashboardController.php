@@ -36,6 +36,7 @@ class DashboardController extends Controller
         // Parcelas de cartao do mes
         $parcelasMes = CartaoParcela::where('user_id', $user->id)
             ->where('mes_referencia', $mes)
+            ->whereHas('cartaoGasto')
             ->with('cartaoGasto.cartao')
             ->get();
 
