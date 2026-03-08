@@ -27,18 +27,52 @@
     </div>
 
     <!-- Resumo do mes -->
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+    <div x-data="{ pagarFaturaOpen: false }" class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
-            <p class="text-slate-400 text-xs uppercase tracking-wide mb-1">Fatura do Mes</p>
+            <p class="text-slate-400 text-xs uppercase tracking-wide mb-1">Fatura do Mês</p>
             <p class="text-2xl font-bold text-white">R$ {{ number_format($totalFaturaMes / 100, 2, ',', '.') }}</p>
         </div>
         <div class="bg-slate-900 border border-emerald-800/50 rounded-2xl p-5">
             <p class="text-slate-400 text-xs uppercase tracking-wide mb-1">Pago</p>
             <p class="text-2xl font-bold text-emerald-400">R$ {{ number_format($totalPagoMes / 100, 2, ',', '.') }}</p>
         </div>
-        <div class="bg-slate-900 border border-rose-800/50 rounded-2xl p-5">
-            <p class="text-slate-400 text-xs uppercase tracking-wide mb-1">Total Devedor</p>
-            <p class="text-2xl font-bold text-rose-400">R$ {{ number_format($totalDevido / 100, 2, ',', '.') }}</p>
+        <div class="bg-slate-900 border border-rose-800/50 rounded-2xl p-5 flex items-center justify-between gap-3">
+            <div>
+                <p class="text-slate-400 text-xs uppercase tracking-wide mb-1">Total Devedor</p>
+                <p class="text-2xl font-bold text-rose-400">R$ {{ number_format($totalDevido / 100, 2, ',', '.') }}</p>
+            </div>
+            @if($totalFaturaMes > $totalPagoMes)
+                <button type="button" @click="pagarFaturaOpen = true"
+                    class="flex-shrink-0 px-3 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-xl transition-colors whitespace-nowrap">
+                    Pagar Fatura
+                </button>
+            @endif
+        </div>
+
+        {{-- Modal Pagar Fatura --}}
+        <div x-show="pagarFaturaOpen" x-transition
+            class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60" style="display:none">
+            <div @click.outside="pagarFaturaOpen = false" class="bg-slate-900 border border-slate-700 rounded-2xl p-6 w-full max-w-sm">
+                <h3 class="font-bold text-white mb-1">Pagar fatura de {{ \Carbon\Carbon::createFromFormat('Y-m', $mes)->format('m/Y') }}</h3>
+                <p class="text-slate-400 text-sm mb-5">Todas as cobranças não pagas deste mês serão marcadas como pagas.</p>
+                <form method="POST" action="{{ route('cartoes.pagar-fatura', $cartao) }}">
+                    @csrf
+                    <input type="hidden" name="mes" value="{{ $mes }}">
+                    <div class="mb-4">
+                        <label class="block text-sm text-slate-300 mb-1.5">Data do pagamento</label>
+                        <input type="date" name="data_pagamento" value="{{ now()->toDateString() }}"
+                            class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500" required>
+                    </div>
+                    <div class="bg-slate-800 rounded-xl p-3 mb-5 flex items-center justify-between">
+                        <span class="text-sm text-slate-400">Total da fatura</span>
+                        <span class="font-bold text-white">R$ {{ number_format($totalFaturaMes / 100, 2, ',', '.') }}</span>
+                    </div>
+                    <div class="flex gap-3">
+                        <button type="button" @click="pagarFaturaOpen = false" class="flex-1 py-2.5 bg-slate-800 text-white rounded-xl text-sm">Cancelar</button>
+                        <button type="submit" class="flex-1 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-xl text-sm">Confirmar</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 

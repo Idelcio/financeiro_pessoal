@@ -42,6 +42,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Cartoes
     Route::resource('cartoes', CartaoController::class)->parameters(['cartoes' => 'cartao']);
+    Route::post('cartoes/{cartao}/pagar-fatura', [CartaoController::class, 'pagarFatura'])->name('cartoes.pagar-fatura');
     Route::get('cartoes/{cartao}/gastos/create', [CartaoGastoController::class, 'create'])->name('cartoes.gastos.create');
     Route::post('cartoes/{cartao}/gastos', [CartaoGastoController::class, 'store'])->name('cartoes.gastos.store');
     Route::delete('cartoes-gastos/{cartaoGasto}', [CartaoGastoController::class, 'destroy'])->name('cartoes.gastos.destroy');

@@ -134,6 +134,32 @@ class CartaoController extends Controller
         return redirect()->route('cartoes.show', $cartao)->with('success', 'Cartao atualizado!');
     }
 
+    public function pagarFatura(Request $request, Cartao $cartao)
+    {
+        abort_if($cartao->user_id != Auth::id(), 403);
+
+        $data = $request->validate([
+            'mes'            => 'required|string',
+            'data_pagamento' => 'required|date',
+        ]);
+
+        $parcelas = CartaoParcela::where('user_id', Auth::id())
+            ->where('mes_referencia', $data['mes'])
+            ->where('pago', false)
+            ->whereHas('cartaoGasto', fn($q) => $q->where('cartao_id', $cartao->id))
+            ->get();
+
+        foreach ($parcelas as $parcela) {
+            $parcela->update([
+                'pago'           => true,
+                'data_pagamento' => $data['data_pagamento'],
+            ]);
+        }
+
+        return redirect()->route('cartoes.show', ['cartao' => $cartao, 'mes' => $data['mes']])
+            ->with('success', "Fatura paga! {$parcelas->count()} cobrança(s) marcada(s) como pagas.");
+    }
+
     public function destroy(Cartao $cartao)
     {
         abort_if($cartao->user_id != Auth::id(), 403);

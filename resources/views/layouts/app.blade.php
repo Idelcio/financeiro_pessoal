@@ -294,6 +294,45 @@
             };
         }
     </script>
+
+    <script>
+        // Permite vírgula como separador decimal em todos os campos monetários
+        document.addEventListener('DOMContentLoaded', function () {
+            // Converte type="number" com decimais para text (aceita vírgula no mobile/BR)
+            document.querySelectorAll('input[type="number"]').forEach(function (input) {
+                var step = parseFloat(input.getAttribute('step') || '1');
+                var isDecimal = step < 1;
+                var isDay = input.getAttribute('min') === '1' && parseInt(input.getAttribute('max') || '0') <= 31;
+
+                if (isDecimal) {
+                    input.setAttribute('type', 'text');
+                    input.setAttribute('inputmode', 'decimal');
+                    input.setAttribute('data-money', '1');
+                } else if (isDay) {
+                    input.setAttribute('type', 'text');
+                    input.setAttribute('inputmode', 'numeric');
+                    input.setAttribute('data-day', '1');
+                }
+            });
+
+            // No submit: normaliza vírgula→ponto e remove separadores de milhar
+            document.querySelectorAll('form').forEach(function (form) {
+                form.addEventListener('submit', function () {
+                    this.querySelectorAll('[data-money]').forEach(function (input) {
+                        var v = input.value.trim().replace(/\s/g, '');
+                        if (v.includes(',')) {
+                            // Formato BR: 1.500,99 → 1500.99
+                            v = v.replace(/\./g, '').replace(',', '.');
+                        }
+                        input.value = v;
+                    });
+                    this.querySelectorAll('[data-day]').forEach(function (input) {
+                        input.value = parseInt(input.value, 10) || '';
+                    });
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>
