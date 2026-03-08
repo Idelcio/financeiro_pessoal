@@ -45,6 +45,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('cartoes/{cartao}/gastos/create', [CartaoGastoController::class, 'create'])->name('cartoes.gastos.create');
     Route::post('cartoes/{cartao}/gastos', [CartaoGastoController::class, 'store'])->name('cartoes.gastos.store');
     Route::delete('cartoes-gastos/{cartaoGasto}', [CartaoGastoController::class, 'destroy'])->name('cartoes.gastos.destroy');
+    Route::post('cartoes-gastos/{cartaoGasto}/cancelar-recorrente', [CartaoGastoController::class, 'cancelarRecorrente'])->name('cartoes.gastos.cancelar-recorrente');
     Route::post('cartoes-parcelas/{parcela}/pagar', [CartaoParcelaController::class, 'pagar'])->name('cartoes.parcelas.pagar');
     Route::post('cartoes-parcelas/{parcela}/desfazer', [CartaoParcelaController::class, 'desfazer'])->name('cartoes.parcelas.desfazer');
 

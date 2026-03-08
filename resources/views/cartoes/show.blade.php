@@ -67,10 +67,24 @@
                                     @if($gasto->tipo === 'empresa')
                                         <span class="text-xs px-2 py-0.5 bg-blue-900/50 text-blue-400 rounded-full">Empresa</span>
                                     @endif
+                                    @if($gasto->recorrente)
+                                        @if($gasto->recorrente_ativa)
+                                            <span class="text-xs px-2 py-0.5 bg-emerald-900/40 text-emerald-400 rounded-full flex items-center gap-1">
+                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                                                Recorrente
+                                            </span>
+                                        @else
+                                            <span class="text-xs px-2 py-0.5 bg-slate-800 text-slate-500 rounded-full">Recorrente cancelada</span>
+                                        @endif
+                                    @endif
                                 </div>
                                 <p class="text-slate-400 text-sm mt-1">
-                                    Parcela {{ $parcelaDoMes->numero_parcela }}/{{ $gasto->total_parcelas }} &bull;
-                                    Total: R$ {{ number_format($gasto->valor_total_centavos / 100, 2, ',', '.') }}
+                                    @if($gasto->recorrente)
+                                        Cobrança {{ $parcelaDoMes->numero_parcela }} &bull; R$ {{ number_format($gasto->valor_total_centavos / 100, 2, ',', '.') }}/mês
+                                    @else
+                                        Parcela {{ $parcelaDoMes->numero_parcela }}/{{ $gasto->total_parcelas }} &bull;
+                                        Total: R$ {{ number_format($gasto->valor_total_centavos / 100, 2, ',', '.') }}
+                                    @endif
                                 </p>
                             </div>
                             <div class="flex items-center gap-3">
@@ -89,6 +103,13 @@
                                         class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-lg transition-colors">
                                         Pagar
                                     </button>
+                                @endif
+                                @if($gasto->recorrente && $gasto->recorrente_ativa)
+                                    <form method="POST" action="{{ route('cartoes.gastos.cancelar-recorrente', $gasto) }}"
+                                        x-data x-on:submit.prevent="if(confirm('Cancelar esta recorrência? As próximas cobranças não serão mais geradas.')) $el.submit()">
+                                        @csrf
+                                        <button type="submit" class="text-xs text-amber-500 hover:text-amber-400 transition-colors whitespace-nowrap">Cancelar recorrência</button>
+                                    </form>
                                 @endif
                                 <form method="POST" action="{{ route('cartoes.gastos.destroy', $gasto) }}"
                                     x-data x-on:submit.prevent="if(confirm('Remover esta compra e todas as parcelas?')) $el.submit()">

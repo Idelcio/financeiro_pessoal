@@ -13,10 +13,15 @@ class CartaoGasto extends Model
     protected $fillable = [
         'cartao_id', 'user_id', 'descricao', 'valor_total_centavos',
         'total_parcelas', 'data_compra', 'categoria', 'tipo', 'observacao',
+        'recorrente', 'recorrente_ativa',
     ];
 
     protected $casts = [
-        'user_id' => 'integer','data_compra' => 'date'];
+        'user_id' => 'integer',
+        'data_compra' => 'date',
+        'recorrente' => 'boolean',
+        'recorrente_ativa' => 'boolean',
+    ];
 
     public function cartao()
     {

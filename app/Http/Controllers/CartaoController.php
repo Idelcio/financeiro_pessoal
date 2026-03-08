@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cartao;
 use App\Models\CartaoParcela;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -55,6 +56,31 @@ class CartaoController extends Controller
         abort_if($cartao->user_id != Auth::id(), 403);
 
         $mes = request('mes', now()->format('Y-m'));
+
+        // Gera parcelas do mês para compras recorrentes ativas
+        $cartao->gastos()
+            ->where('recorrente', true)
+            ->where('recorrente_ativa', true)
+            ->get()
+            ->each(function ($gasto) use ($mes) {
+                $mesInicio = $gasto->data_compra->format('Y-m');
+                if ($mes >= $mesInicio) {
+                    $existe = CartaoParcela::where('cartao_gasto_id', $gasto->id)
+                        ->where('mes_referencia', $mes)
+                        ->exists();
+                    if (!$existe) {
+                        $inicio = Carbon::createFromFormat('Y-m', $mesInicio)->startOfMonth();
+                        $atual  = Carbon::createFromFormat('Y-m', $mes)->startOfMonth();
+                        CartaoParcela::create([
+                            'cartao_gasto_id' => $gasto->id,
+                            'user_id'         => $gasto->user_id,
+                            'numero_parcela'  => $inicio->diffInMonths($atual) + 1,
+                            'valor_centavos'  => $gasto->valor_total_centavos,
+                            'mes_referencia'  => $mes,
+                        ]);
+                    }
+                }
+            });
 
         $gastos = $cartao->gastos()
             ->with(['parcelas' => fn($q) => $q->where('mes_referencia', $mes)])
