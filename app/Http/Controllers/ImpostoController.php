@@ -103,6 +103,7 @@ class ImpostoController extends Controller
     public function destroy(Imposto $imposto)
     {
         abort_if($imposto->user_id != Auth::id(), 403);
+        $imposto->parcelas()->delete();
         $imposto->delete();
         return redirect()->route('impostos.index')->with('success', 'Imposto removido!');
     }

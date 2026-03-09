@@ -59,20 +59,37 @@
             <div class="space-y-2">
                 @foreach($fixosVencendo as $gasto)
                     <div class="flex items-center justify-between py-2.5 border-b border-slate-800/50 last:border-0 last:pb-0">
-                        <div class="pr-3">
+                        <div class="pr-3 flex-1">
                             <p class="text-sm font-medium text-white line-clamp-1">{{ $gasto->nome }}</p>
                             <p class="text-xs text-slate-400">Vence dia {{ $gasto->dia_vencimento }}</p>
                         </div>
-                        <span class="text-sm font-semibold text-amber-400 whitespace-nowrap">R$ {{ number_format($gasto->valor_centavos / 100, 2, ',', '.') }}</span>
+                        <div class="flex items-center gap-2 whitespace-nowrap">
+                            <span class="text-sm font-semibold text-amber-400">R$ {{ number_format($gasto->valor_centavos / 100, 2, ',', '.') }}</span>
+                            <a href="{{ route('gastos-fixos.edit', $gasto) }}" class="p-1 text-slate-600 hover:text-slate-400 transition-colors" title="Editar">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                            </a>
+                        </div>
                     </div>
                 @endforeach
                 @foreach($impostosVencendo as $parcela)
                     <div class="flex items-center justify-between py-2.5 border-b border-slate-800/50 last:border-0 last:pb-0">
-                        <div class="pr-3">
-                            <p class="text-sm font-medium text-white line-clamp-1">{{ $parcela->imposto?->nome ?? '—' }} ({{ $parcela->numero_parcela }}x)</p>
+                        <div class="pr-3 flex-1">
+                            <p class="text-sm font-medium text-white line-clamp-1">
+                                {{ $parcela->imposto?->nome ?? 'Imposto removido' }}
+                                <span class="text-slate-400">({{ $parcela->numero_parcela }}x)</span>
+                            </p>
                             <p class="text-xs text-slate-400">Vence em {{ $parcela->data_vencimento->format('d/m/Y') }}</p>
                         </div>
-                        <span class="text-sm font-semibold text-amber-400 whitespace-nowrap">R$ {{ number_format($parcela->valor_centavos / 100, 2, ',', '.') }}</span>
+                        <div class="flex items-center gap-2 whitespace-nowrap">
+                            <span class="text-sm font-semibold text-amber-400">R$ {{ number_format($parcela->valor_centavos / 100, 2, ',', '.') }}</span>
+                            <form method="POST" action="{{ route('impostos.parcelas.destroy', $parcela) }}"
+                                x-data x-on:submit.prevent="if(confirm('Remover esta parcela?')) $el.submit()">
+                                @csrf @method('DELETE')
+                                <button type="submit" class="p-1 text-slate-600 hover:text-rose-400 transition-colors" title="Remover parcela">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 @endforeach
             </div>

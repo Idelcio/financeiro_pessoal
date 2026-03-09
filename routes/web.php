@@ -55,6 +55,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('impostos', ImpostoController::class);
     Route::post('impostos-parcelas/{parcela}/pagar', [ImpostoParcelaController::class, 'pagar'])->name('impostos.parcelas.pagar');
     Route::post('impostos-parcelas/{parcela}/desfazer', [ImpostoParcelaController::class, 'desfazer'])->name('impostos.parcelas.desfazer');
+    Route::delete('impostos-parcelas/{parcela}', [ImpostoParcelaController::class, 'destroy'])->name('impostos.parcelas.destroy');
 
     // Gastos Avulsos
     Route::resource('gastos-avulsos', GastoAvulsoController::class)->except(['show']);

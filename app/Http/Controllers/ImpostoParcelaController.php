@@ -35,4 +35,11 @@ class ImpostoParcelaController extends Controller
 
         return back()->with('success', 'Pagamento desfeito!');
     }
+
+    public function destroy(ImpostoParcela $parcela)
+    {
+        abort_if($parcela->user_id != Auth::id(), 403);
+        $parcela->delete();
+        return back()->with('success', 'Parcela removida!');
+    }
 }
