@@ -69,7 +69,7 @@
                 @foreach($impostosVencendo as $parcela)
                     <div class="flex items-center justify-between py-2.5 border-b border-slate-800/50 last:border-0 last:pb-0">
                         <div class="pr-3">
-                            <p class="text-sm font-medium text-white line-clamp-1">{{ $parcela->imposto->nome }} ({{ $parcela->numero_parcela }}x)</p>
+                            <p class="text-sm font-medium text-white line-clamp-1">{{ $parcela->imposto?->nome ?? '—' }} ({{ $parcela->numero_parcela }}x)</p>
                             <p class="text-xs text-slate-400">Vence em {{ $parcela->data_vencimento->format('d/m/Y') }}</p>
                         </div>
                         <span class="text-sm font-semibold text-amber-400 whitespace-nowrap">R$ {{ number_format($parcela->valor_centavos / 100, 2, ',', '.') }}</span>

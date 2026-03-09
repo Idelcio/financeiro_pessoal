@@ -13,12 +13,12 @@ class ImpostoParcelaController extends Controller
         abort_if($parcela->user_id != Auth::id(), 403);
 
         $data = $request->validate([
-            'data_pagamento' => 'required|date',
+            'data_pagamento' => 'nullable|date',
         ]);
 
         $parcela->update([
             'pago'           => true,
-            'data_pagamento' => $data['data_pagamento'],
+            'data_pagamento' => $data['data_pagamento'] ?? now()->toDateString(),
         ]);
 
         return back()->with('success', "Parcela {$parcela->numero_parcela} paga com sucesso!");
