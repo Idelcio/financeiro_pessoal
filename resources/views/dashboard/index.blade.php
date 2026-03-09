@@ -31,7 +31,7 @@
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
             <p class="text-slate-400 text-xs font-medium uppercase tracking-wide mb-2">Gastos do Mês</p>
             <p class="text-3xl font-bold text-white">R$ {{ number_format($totalGeralMes / 100, 2, ',', '.') }}</p>
-            <p class="text-slate-500 text-xs mt-1">Fixos + Cartões</p>
+            <p class="text-slate-500 text-xs mt-1">Fixos + Cartões + Veículos</p>
         </div>
         <div class="bg-slate-900 border {{ $saldo >= 0 ? 'border-emerald-800/50' : 'border-rose-800/50' }} rounded-2xl p-5">
             <p class="text-slate-400 text-xs font-medium uppercase tracking-wide mb-2">Saldo</p>
@@ -131,6 +131,49 @@
                 </div>
             @endif
         </div>
+
+        <!-- Gastos com Veiculos do mes -->
+        @if($totalVeiculosMes > 0)
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="font-bold text-white">Veículos este mês</h2>
+                <a href="{{ route('veiculos.index') }}" class="text-xs text-emerald-400 hover:text-emerald-300">Ver veículos</a>
+            </div>
+            <div class="space-y-1">
+                @foreach($combustiveisMes->take(3) as $item)
+                    <div class="flex items-center justify-between py-2.5 border-b border-slate-800/50 last:border-0 last:pb-0">
+                        <div>
+                            <p class="text-sm font-medium text-white">⛽ Combustível{{ $item->veiculo ? ' — '.$item->veiculo->nome : '' }}</p>
+                            <p class="text-xs text-slate-400">{{ $item->data_abastecimento->format('d/m') }}</p>
+                        </div>
+                        <span class="text-sm font-semibold text-slate-300">R$ {{ number_format($item->valor_total_centavos / 100, 2, ',', '.') }}</span>
+                    </div>
+                @endforeach
+                @foreach($manutencoesMes->take(3) as $item)
+                    <div class="flex items-center justify-between py-2.5 border-b border-slate-800/50 last:border-0 last:pb-0">
+                        <div>
+                            <p class="text-sm font-medium text-white">🔧 {{ $item->tipo_label }}{{ $item->veiculo ? ' — '.$item->veiculo->nome : '' }}</p>
+                            <p class="text-xs text-slate-400">{{ $item->data->format('d/m') }}</p>
+                        </div>
+                        <span class="text-sm font-semibold text-slate-300">R$ {{ number_format($item->valor_centavos / 100, 2, ',', '.') }}</span>
+                    </div>
+                @endforeach
+                @foreach($despesasVeiculoMes->take(3) as $item)
+                    <div class="flex items-center justify-between py-2.5 border-b border-slate-800/50 last:border-0 last:pb-0">
+                        <div>
+                            <p class="text-sm font-medium text-white">🚗 {{ $item->tipo_label }}{{ $item->veiculo ? ' — '.$item->veiculo->nome : '' }}</p>
+                            <p class="text-xs text-slate-400">{{ $item->data->format('d/m') }}</p>
+                        </div>
+                        <span class="text-sm font-semibold text-slate-300">R$ {{ number_format($item->valor_centavos / 100, 2, ',', '.') }}</span>
+                    </div>
+                @endforeach
+            </div>
+            <div class="mt-3 pt-3 border-t border-slate-800 flex justify-between text-sm">
+                <span class="text-slate-400">Total veículos</span>
+                <span class="font-bold text-white">R$ {{ number_format($totalVeiculosMes / 100, 2, ',', '.') }}</span>
+            </div>
+        </div>
+        @endif
 
         <!-- Parcelas de cartao do mes -->
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">

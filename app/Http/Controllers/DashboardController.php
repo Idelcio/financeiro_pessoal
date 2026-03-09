@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\CartaoParcela;
+use App\Models\Combustivel;
+use App\Models\DespesaVeiculo;
 use App\Models\GastoFixo;
 use App\Models\GastoFixoPagamento;
 use App\Models\ImpostoParcela;
+use App\Models\Manutencao;
 use App\Models\Receita;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -61,7 +64,37 @@ class DashboardController extends Controller
                 && $g->dia_vencimento <= ($diaAtual + 7);
         });
 
-        $totalGeralMes      = $totalFixosMes + $totalCartoesMes;
+        // Gastos com veiculos do mes (combustivel + manutencoes + despesas)
+        $mesParts = explode('-', $mes);
+        $mesAno = $mesParts[0];
+        $mesNum = $mesParts[1];
+
+        $combustiveisMes = Combustivel::where('user_id', $user->id)
+            ->whereYear('data_abastecimento', $mesAno)
+            ->whereMonth('data_abastecimento', $mesNum)
+            ->when($tipo !== 'todos', fn($q) => $q->where('tipo', $tipo))
+            ->with('veiculo')
+            ->get();
+
+        $manutencoesMes = Manutencao::where('user_id', $user->id)
+            ->whereYear('data', $mesAno)
+            ->whereMonth('data', $mesNum)
+            ->when($tipo !== 'todos', fn($q) => $q->where('tipo_uso', $tipo))
+            ->with('veiculo')
+            ->get();
+
+        $despesasVeiculoMes = DespesaVeiculo::where('user_id', $user->id)
+            ->whereYear('data', $mesAno)
+            ->whereMonth('data', $mesNum)
+            ->when($tipo !== 'todos', fn($q) => $q->where('tipo_uso', $tipo))
+            ->with('veiculo')
+            ->get();
+
+        $totalVeiculosMes = $combustiveisMes->sum('valor_total_centavos')
+            + $manutencoesMes->sum('valor_centavos')
+            + $despesasVeiculoMes->sum('valor_centavos');
+
+        $totalGeralMes      = $totalFixosMes + $totalCartoesMes + $totalVeiculosMes;
         $totalGeralPago     = $totalFixosPago + $totalCartoesPago;
         $totalGeralPendente = $totalFixosPendente + $totalCartoesPendente;
 
@@ -84,6 +117,7 @@ class DashboardController extends Controller
             'totalFixosMes', 'totalFixosPago', 'totalFixosPendente',
             'parcelasMes', 'totalCartoesMes', 'totalCartoesPago', 'totalCartoesPendente',
             'impostosVencendo', 'fixosVencendo',
+            'combustiveisMes', 'manutencoesMes', 'despesasVeiculoMes', 'totalVeiculosMes',
             'totalGeralMes', 'totalGeralPago', 'totalGeralPendente',
             'totalReceitas', 'saldo'
         ));
