@@ -6,6 +6,7 @@ use App\Models\CartaoParcela;
 use App\Models\GastoFixo;
 use App\Models\GastoFixoPagamento;
 use App\Models\ImpostoParcela;
+use App\Models\Receita;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -64,12 +65,27 @@ class DashboardController extends Controller
         $totalGeralPago     = $totalFixosPago + $totalCartoesPago;
         $totalGeralPendente = $totalFixosPendente + $totalCartoesPendente;
 
+        // Entradas (receitas) do mes
+        $receitasRecorrentes = Receita::where('user_id', $user->id)
+            ->where('recorrente', true)
+            ->whereRaw("DATE_FORMAT(data, '%Y-%m') <= ?", [$mes])
+            ->get();
+
+        $receitasAvulsas = Receita::where('user_id', $user->id)
+            ->where('recorrente', false)
+            ->whereRaw("DATE_FORMAT(data, '%Y-%m') = ?", [$mes])
+            ->get();
+
+        $totalReceitas = $receitasRecorrentes->sum('valor_centavos') + $receitasAvulsas->sum('valor_centavos');
+        $saldo = $totalReceitas - $totalGeralMes;
+
         return view('dashboard.index', compact(
             'gastosFixos', 'pagamentosDoMes', 'mes', 'tipo',
             'totalFixosMes', 'totalFixosPago', 'totalFixosPendente',
             'parcelasMes', 'totalCartoesMes', 'totalCartoesPago', 'totalCartoesPendente',
             'impostosVencendo', 'fixosVencendo',
-            'totalGeralMes', 'totalGeralPago', 'totalGeralPendente'
+            'totalGeralMes', 'totalGeralPago', 'totalGeralPendente',
+            'totalReceitas', 'saldo'
         ));
     }
 }

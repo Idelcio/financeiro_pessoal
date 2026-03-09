@@ -20,16 +20,25 @@
     </div>
 
     <!-- Stat Cards -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div class="bg-slate-900 border border-emerald-800/50 rounded-2xl p-5">
+            <p class="text-slate-400 text-xs font-medium uppercase tracking-wide mb-2">Entradas</p>
+            <p class="text-3xl font-bold text-emerald-400">R$ {{ number_format($totalReceitas / 100, 2, ',', '.') }}</p>
+            <p class="text-slate-500 text-xs mt-1">
+                <a href="{{ route('receitas.index', ['mes' => $mes]) }}" class="hover:text-emerald-400 transition-colors">Ver entradas</a>
+            </p>
+        </div>
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
-            <p class="text-slate-400 text-xs font-medium uppercase tracking-wide mb-2">Total do Mês</p>
+            <p class="text-slate-400 text-xs font-medium uppercase tracking-wide mb-2">Gastos do Mês</p>
             <p class="text-3xl font-bold text-white">R$ {{ number_format($totalGeralMes / 100, 2, ',', '.') }}</p>
             <p class="text-slate-500 text-xs mt-1">Fixos + Cartões</p>
         </div>
-        <div class="bg-slate-900 border border-emerald-800/50 rounded-2xl p-5">
-            <p class="text-slate-400 text-xs font-medium uppercase tracking-wide mb-2">Já Pago</p>
-            <p class="text-3xl font-bold text-emerald-400">R$ {{ number_format($totalGeralPago / 100, 2, ',', '.') }}</p>
-            <p class="text-slate-500 text-xs mt-1">{{ $totalGeralMes > 0 ? round(($totalGeralPago / $totalGeralMes) * 100) : 0 }}% do total</p>
+        <div class="bg-slate-900 border {{ $saldo >= 0 ? 'border-emerald-800/50' : 'border-rose-800/50' }} rounded-2xl p-5">
+            <p class="text-slate-400 text-xs font-medium uppercase tracking-wide mb-2">Saldo</p>
+            <p class="text-3xl font-bold {{ $saldo >= 0 ? 'text-emerald-400' : 'text-rose-400' }}">
+                {{ $saldo >= 0 ? '' : '-' }}R$ {{ number_format(abs($saldo) / 100, 2, ',', '.') }}
+            </p>
+            <p class="text-slate-500 text-xs mt-1">Entradas - Gastos</p>
         </div>
         <div class="bg-slate-900 border border-rose-800/50 rounded-2xl p-5">
             <p class="text-slate-400 text-xs font-medium uppercase tracking-wide mb-2">Pendente</p>

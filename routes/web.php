@@ -15,6 +15,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VeiculoController;
 use App\Http\Controllers\ManutencaoController;
 use App\Http\Controllers\DespesaVeiculoController;
+use App\Http\Controllers\ReceitaController;
 use App\Http\Controllers\Admin\AdminController;
 use Illuminate\Support\Facades\Route;
 
@@ -57,6 +58,9 @@ Route::middleware(['auth'])->group(function () {
 
     // Gastos Avulsos
     Route::resource('gastos-avulsos', GastoAvulsoController::class)->except(['show']);
+
+    // Entradas (Receitas)
+    Route::resource('receitas', ReceitaController::class)->except(['show']);
 
     // Categorias
     Route::resource('categorias', CategoriaController::class)->except(['show', 'create', 'edit']);
