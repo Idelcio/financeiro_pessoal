@@ -31,7 +31,7 @@
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
             <p class="text-slate-400 text-xs font-medium uppercase tracking-wide mb-2">Gastos do Mês</p>
             <p class="text-3xl font-bold text-white">R$ {{ number_format($totalGeralMes / 100, 2, ',', '.') }}</p>
-            <p class="text-slate-500 text-xs mt-1">Fixos + Cartões + Veículos</p>
+            <p class="text-slate-500 text-xs mt-1">Fixos + Cartões + Veículos + Avulsos + Impostos</p>
         </div>
         <div class="bg-slate-900 border {{ $saldo >= 0 ? 'border-emerald-800/50' : 'border-rose-800/50' }} rounded-2xl p-5">
             <p class="text-slate-400 text-xs font-medium uppercase tracking-wide mb-2">Saldo</p>
@@ -171,6 +171,66 @@
             <div class="mt-3 pt-3 border-t border-slate-800 flex justify-between text-sm">
                 <span class="text-slate-400">Total veículos</span>
                 <span class="font-bold text-white">R$ {{ number_format($totalVeiculosMes / 100, 2, ',', '.') }}</span>
+            </div>
+        </div>
+        @endif
+
+        <!-- Gastos Avulsos do mes -->
+        @if($totalAvulsosMes > 0)
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="font-bold text-white">Gastos Avulsos</h2>
+                <a href="{{ route('gastos-avulsos.index') }}" class="text-xs text-emerald-400 hover:text-emerald-300">Ver todos</a>
+            </div>
+            <div class="space-y-1">
+                @foreach($gastosAvulsosMes->take(6) as $item)
+                    <div class="flex items-center justify-between py-2.5 border-b border-slate-800/50 last:border-0 last:pb-0">
+                        <div>
+                            <p class="text-sm font-medium text-white line-clamp-1">{{ $item->descricao }}</p>
+                            <p class="text-xs text-slate-400">{{ $item->data->format('d/m') }}{{ $item->categoria ? ' · '.$item->categoria->nome : '' }}</p>
+                        </div>
+                        <span class="text-sm font-semibold text-slate-300">R$ {{ number_format($item->valor_centavos / 100, 2, ',', '.') }}</span>
+                    </div>
+                @endforeach
+            </div>
+            <div class="mt-3 pt-3 border-t border-slate-800 flex justify-between text-sm">
+                <span class="text-slate-400">Total avulsos</span>
+                <span class="font-bold text-white">R$ {{ number_format($totalAvulsosMes / 100, 2, ',', '.') }}</span>
+            </div>
+        </div>
+        @endif
+
+        <!-- Impostos do mes -->
+        @if($totalImpostosMes > 0)
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="font-bold text-white">Impostos</h2>
+                <a href="{{ route('impostos.index') }}" class="text-xs text-emerald-400 hover:text-emerald-300">Ver todos</a>
+            </div>
+            <div class="space-y-1">
+                @foreach($impostosDoMes as $parcela)
+                    <div class="flex items-center justify-between py-2.5 border-b border-slate-800/50 last:border-0 last:pb-0">
+                        <div>
+                            <p class="text-sm font-medium text-white line-clamp-1">
+                                {{ $parcela->imposto?->nome ?? 'Imposto removido' }}
+                                <span class="text-slate-500 text-xs">({{ $parcela->numero_parcela }}x)</span>
+                            </p>
+                            <p class="text-xs text-slate-400">Vence {{ $parcela->data_vencimento->format('d/m') }}</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm font-semibold text-slate-300">R$ {{ number_format($parcela->valor_centavos / 100, 2, ',', '.') }}</span>
+                            @if($parcela->pago)
+                                <span class="text-[10px] uppercase tracking-wider font-semibold px-2 py-1 bg-emerald-900/40 text-emerald-400 rounded-lg">Pago</span>
+                            @else
+                                <span class="text-[10px] uppercase tracking-wider font-semibold px-2 py-1 bg-rose-900/40 text-rose-400 rounded-lg">Pend.</span>
+                            @endif
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+            <div class="mt-3 pt-3 border-t border-slate-800 flex justify-between text-sm">
+                <span class="text-slate-400">Total impostos</span>
+                <span class="font-bold text-white">R$ {{ number_format($totalImpostosMes / 100, 2, ',', '.') }}</span>
             </div>
         </div>
         @endif

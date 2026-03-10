@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\CartaoParcela;
 use App\Models\Combustivel;
 use App\Models\DespesaVeiculo;
+use App\Models\GastoAvulso;
 use App\Models\GastoFixo;
 use App\Models\GastoFixoPagamento;
 use App\Models\ImpostoParcela;
@@ -94,9 +95,31 @@ class DashboardController extends Controller
             + $manutencoesMes->sum('valor_centavos')
             + $despesasVeiculoMes->sum('valor_centavos');
 
-        $totalGeralMes      = $totalFixosMes + $totalCartoesMes + $totalVeiculosMes;
-        $totalGeralPago     = $totalFixosPago + $totalCartoesPago;
-        $totalGeralPendente = $totalFixosPendente + $totalCartoesPendente;
+        // Gastos avulsos do mes
+        $gastosAvulsosMes = GastoAvulso::where('user_id', $user->id)
+            ->whereYear('data', $mesAno)
+            ->whereMonth('data', $mesNum)
+            ->when($tipo !== 'todos', fn($q) => $q->where('tipo', $tipo))
+            ->with('categoria')
+            ->orderByDesc('data')
+            ->get();
+
+        $totalAvulsosMes = $gastosAvulsosMes->sum('valor_centavos');
+
+        // Impostos pagos no mes
+        $impostosDoMes = ImpostoParcela::where('user_id', $user->id)
+            ->whereYear('data_vencimento', $mesAno)
+            ->whereMonth('data_vencimento', $mesNum)
+            ->with('imposto')
+            ->get();
+
+        $totalImpostosMes      = $impostosDoMes->sum('valor_centavos');
+        $totalImpostosPago     = $impostosDoMes->where('pago', true)->sum('valor_centavos');
+        $totalImpostosPendente = $totalImpostosMes - $totalImpostosPago;
+
+        $totalGeralMes      = $totalFixosMes + $totalCartoesMes + $totalVeiculosMes + $totalAvulsosMes + $totalImpostosMes;
+        $totalGeralPago     = $totalFixosPago + $totalCartoesPago + $totalImpostosPago;
+        $totalGeralPendente = $totalFixosPendente + $totalCartoesPendente + $totalImpostosPendente;
 
         // Entradas (receitas) do mes
         $receitasRecorrentes = Receita::where('user_id', $user->id)
@@ -118,6 +141,8 @@ class DashboardController extends Controller
             'parcelasMes', 'totalCartoesMes', 'totalCartoesPago', 'totalCartoesPendente',
             'impostosVencendo', 'fixosVencendo',
             'combustiveisMes', 'manutencoesMes', 'despesasVeiculoMes', 'totalVeiculosMes',
+            'gastosAvulsosMes', 'totalAvulsosMes',
+            'impostosDoMes', 'totalImpostosMes', 'totalImpostosPago', 'totalImpostosPendente',
             'totalGeralMes', 'totalGeralPago', 'totalGeralPendente',
             'totalReceitas', 'saldo'
         ));
