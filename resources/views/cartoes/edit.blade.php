@@ -30,6 +30,16 @@
                             <option value="Elo" {{ old('bandeira', $cartao->bandeira) === 'Elo' ? 'selected' : '' }}>Elo</option>
                             <option value="American Express" {{ old('bandeira', $cartao->bandeira) === 'American Express' ? 'selected' : '' }}>American Express</option>
                             <option value="Hipercard" {{ old('bandeira', $cartao->bandeira) === 'Hipercard' ? 'selected' : '' }}>Hipercard</option>
+                            <option value="Banrisul" {{ old('bandeira', $cartao->bandeira) === 'Banrisul' ? 'selected' : '' }}>Banrisul</option>
+                            <option value="Cabal" {{ old('bandeira', $cartao->bandeira) === 'Cabal' ? 'selected' : '' }}>Cabal</option>
+                            <option value="Diners Club" {{ old('bandeira', $cartao->bandeira) === 'Diners Club' ? 'selected' : '' }}>Diners Club</option>
+                            <option value="Discover" {{ old('bandeira', $cartao->bandeira) === 'Discover' ? 'selected' : '' }}>Discover</option>
+                            <option value="Aura" {{ old('bandeira', $cartao->bandeira) === 'Aura' ? 'selected' : '' }}>Aura</option>
+                            <option value="Sorocred" {{ old('bandeira', $cartao->bandeira) === 'Sorocred' ? 'selected' : '' }}>Sorocred</option>
+                            <option value="Banescard" {{ old('bandeira', $cartao->bandeira) === 'Banescard' ? 'selected' : '' }}>Banescard</option>
+                            <option value="UnionPay" {{ old('bandeira', $cartao->bandeira) === 'UnionPay' ? 'selected' : '' }}>UnionPay</option>
+                            <option value="JCB" {{ old('bandeira', $cartao->bandeira) === 'JCB' ? 'selected' : '' }}>JCB</option>
+                            <option value="Outra" {{ old('bandeira', $cartao->bandeira) === 'Outra' ? 'selected' : '' }}>Outra</option>
                         </select>
                     </div>
                     <div>

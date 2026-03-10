@@ -23,11 +23,21 @@
                         <label class="block text-sm font-medium text-slate-300 mb-1.5">Bandeira</label>
                         <select name="bandeira" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500">
                             <option value="">Selecione...</option>
-                            <option value="visa" {{ old('bandeira') === 'visa' ? 'selected' : '' }}>Visa</option>
-                            <option value="mastercard" {{ old('bandeira') === 'mastercard' ? 'selected' : '' }}>Mastercard</option>
-                            <option value="elo" {{ old('bandeira') === 'elo' ? 'selected' : '' }}>Elo</option>
-                            <option value="amex" {{ old('bandeira') === 'amex' ? 'selected' : '' }}>American Express</option>
-                            <option value="hipercard" {{ old('bandeira') === 'hipercard' ? 'selected' : '' }}>Hipercard</option>
+                            <option value="Visa" {{ old('bandeira') === 'Visa' ? 'selected' : '' }}>Visa</option>
+                            <option value="Mastercard" {{ old('bandeira') === 'Mastercard' ? 'selected' : '' }}>Mastercard</option>
+                            <option value="Elo" {{ old('bandeira') === 'Elo' ? 'selected' : '' }}>Elo</option>
+                            <option value="American Express" {{ old('bandeira') === 'American Express' ? 'selected' : '' }}>American Express</option>
+                            <option value="Hipercard" {{ old('bandeira') === 'Hipercard' ? 'selected' : '' }}>Hipercard</option>
+                            <option value="Banrisul" {{ old('bandeira') === 'Banrisul' ? 'selected' : '' }}>Banrisul</option>
+                            <option value="Cabal" {{ old('bandeira') === 'Cabal' ? 'selected' : '' }}>Cabal</option>
+                            <option value="Diners Club" {{ old('bandeira') === 'Diners Club' ? 'selected' : '' }}>Diners Club</option>
+                            <option value="Discover" {{ old('bandeira') === 'Discover' ? 'selected' : '' }}>Discover</option>
+                            <option value="Aura" {{ old('bandeira') === 'Aura' ? 'selected' : '' }}>Aura</option>
+                            <option value="Sorocred" {{ old('bandeira') === 'Sorocred' ? 'selected' : '' }}>Sorocred</option>
+                            <option value="Banescard" {{ old('bandeira') === 'Banescard' ? 'selected' : '' }}>Banescard</option>
+                            <option value="UnionPay" {{ old('bandeira') === 'UnionPay' ? 'selected' : '' }}>UnionPay</option>
+                            <option value="JCB" {{ old('bandeira') === 'JCB' ? 'selected' : '' }}>JCB</option>
+                            <option value="Outra" {{ old('bandeira') === 'Outra' ? 'selected' : '' }}>Outra</option>
                         </select>
                     </div>
                     <div>
