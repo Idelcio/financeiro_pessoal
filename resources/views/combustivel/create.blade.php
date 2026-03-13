@@ -26,6 +26,11 @@
                 </div>
                 @endif
 
+                <div class="flex items-start gap-2 p-3 bg-slate-800/60 border border-slate-700/50 rounded-xl text-xs text-slate-400">
+                    <svg class="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <span>Somente <strong class="text-white">Valor total</strong> é obrigatório. Litros, preço/litro e KM são opcionais — use-os para calcular o consumo médio do veículo.</span>
+                </div>
+
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-slate-300 mb-1.5">Data *</label>
@@ -47,17 +52,17 @@
                             class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500" required>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-300 mb-1.5">Litros</label>
+                        <label class="block text-sm font-medium text-slate-300 mb-1.5">Litros <span class="text-slate-500 font-normal">(opcional)</span></label>
                         <input type="number" step="0.001" name="litros" value="{{ old('litros') }}" placeholder="Ex: 40.5"
                             class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-300 mb-1.5">Preco por litro (R$)</label>
+                        <label class="block text-sm font-medium text-slate-300 mb-1.5">Preço por litro <span class="text-slate-500 font-normal">(opcional)</span></label>
                         <input type="number" step="0.001" name="valor_litro" value="{{ old('valor_litro') }}" placeholder="Ex: 5.89"
                             class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-300 mb-1.5">KM atual</label>
+                        <label class="block text-sm font-medium text-slate-300 mb-1.5">KM atual <span class="text-slate-500 font-normal">(opcional)</span></label>
                         <input type="number" name="km_atual" value="{{ old('km_atual') }}" placeholder="Ex: 45000"
                             class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500">
                     </div>

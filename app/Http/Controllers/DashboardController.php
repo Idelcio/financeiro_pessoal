@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CartaoParcela;
+use App\Models\Categoria;
 use App\Models\Combustivel;
 use App\Models\DespesaVeiculo;
 use App\Models\GastoAvulso;
@@ -19,9 +20,13 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-        $user = Auth::user();
-        $tipo = $request->get('tipo', 'todos');
-        $mes  = $request->get('mes', now()->format('Y-m'));
+        $user       = Auth::user();
+        $tipo       = $request->get('tipo', 'todos');
+        $mes        = $request->get('mes', now()->format('Y-m'));
+        $categoriaId = $request->get('categoria_id');
+
+        // Categorias do usuario para o filtro
+        $categorias = Categoria::where('user_id', $user->id)->orderBy('nome')->get();
 
         // Gastos fixos do mes
         $gastosFixos = GastoFixo::where('user_id', $user->id)
@@ -100,6 +105,7 @@ class DashboardController extends Controller
             ->whereYear('data', $mesAno)
             ->whereMonth('data', $mesNum)
             ->when($tipo !== 'todos', fn($q) => $q->where('tipo', $tipo))
+            ->when($categoriaId, fn($q) => $q->where('categoria_id', $categoriaId))
             ->with('categoria')
             ->orderByDesc('data')
             ->get();
@@ -136,7 +142,7 @@ class DashboardController extends Controller
         $saldo = $totalReceitas - $totalGeralMes;
 
         return view('dashboard.index', compact(
-            'gastosFixos', 'pagamentosDoMes', 'mes', 'tipo',
+            'gastosFixos', 'pagamentosDoMes', 'mes', 'tipo', 'categorias', 'categoriaId',
             'totalFixosMes', 'totalFixosPago', 'totalFixosPendente',
             'parcelasMes', 'totalCartoesMes', 'totalCartoesPago', 'totalCartoesPendente',
             'impostosVencendo', 'fixosVencendo',

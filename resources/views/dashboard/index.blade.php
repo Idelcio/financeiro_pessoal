@@ -15,6 +15,16 @@
                 <option value="pessoal" {{ $tipo === 'pessoal' ? 'selected' : '' }}>Pessoal</option>
                 <option value="empresa" {{ $tipo === 'empresa' ? 'selected' : '' }}>Empresa</option>
             </select>
+            @if($categorias->isNotEmpty())
+            <select name="categoria_id" class="w-full sm:w-auto bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-emerald-500">
+                <option value="">Todas categorias</option>
+                @foreach($categorias as $cat)
+                    <option value="{{ $cat->id }}" {{ $categoriaId == $cat->id ? 'selected' : '' }}>
+                        {{ $cat->nome }}
+                    </option>
+                @endforeach
+            </select>
+            @endif
             <button type="submit" class="w-full sm:w-auto px-5 py-2 bg-slate-700 hover:bg-slate-600 text-white text-sm font-medium rounded-xl transition-colors">Filtrar</button>
         </form>
     </div>
@@ -185,11 +195,18 @@
             <div class="space-y-1">
                 @foreach($gastosAvulsosMes->take(6) as $item)
                     <div class="flex items-center justify-between py-2.5 border-b border-slate-800/50 last:border-0 last:pb-0">
-                        <div>
-                            <p class="text-sm font-medium text-white line-clamp-1">{{ $item->descricao }}</p>
-                            <p class="text-xs text-slate-400">{{ $item->data->format('d/m') }}{{ $item->categoria ? ' · '.$item->categoria->nome : '' }}</p>
+                        <div class="flex items-center gap-2.5 min-w-0">
+                            @if($item->categoria && $item->categoria->cor)
+                                <span class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background-color: {{ $item->categoria->cor }}"></span>
+                            @else
+                                <span class="w-2.5 h-2.5 rounded-full flex-shrink-0 bg-slate-600"></span>
+                            @endif
+                            <div class="min-w-0">
+                                <p class="text-sm font-medium text-white line-clamp-1">{{ $item->descricao }}</p>
+                                <p class="text-xs text-slate-400">{{ $item->data->format('d/m') }}{{ $item->categoria ? ' · '.$item->categoria->nome : '' }}</p>
+                            </div>
                         </div>
-                        <span class="text-sm font-semibold text-slate-300">R$ {{ number_format($item->valor_centavos / 100, 2, ',', '.') }}</span>
+                        <span class="text-sm font-semibold text-slate-300 ml-3 whitespace-nowrap">R$ {{ number_format($item->valor_centavos / 100, 2, ',', '.') }}</span>
                     </div>
                 @endforeach
             </div>
