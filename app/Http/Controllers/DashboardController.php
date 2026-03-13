@@ -18,7 +18,19 @@ use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
+    public function print(Request $request)
+    {
+        $data = $this->getData($request);
+        return view('dashboard.print', $data);
+    }
+
     public function index(Request $request)
+    {
+        $data = $this->getData($request);
+        return view('dashboard.index', $data);
+    }
+
+    private function getData(Request $request): array
     {
         $user       = Auth::user();
         $tipo       = $request->get('tipo', 'todos');
@@ -141,7 +153,7 @@ class DashboardController extends Controller
         $totalReceitas = $receitasRecorrentes->sum('valor_centavos') + $receitasAvulsas->sum('valor_centavos');
         $saldo = $totalReceitas - $totalGeralMes;
 
-        return view('dashboard.index', compact(
+        return compact(
             'gastosFixos', 'pagamentosDoMes', 'mes', 'tipo', 'categorias', 'categoriaId',
             'totalFixosMes', 'totalFixosPago', 'totalFixosPendente',
             'parcelasMes', 'totalCartoesMes', 'totalCartoesPago', 'totalCartoesPendente',
@@ -151,6 +163,6 @@ class DashboardController extends Controller
             'impostosDoMes', 'totalImpostosMes', 'totalImpostosPago', 'totalImpostosPendente',
             'totalGeralMes', 'totalGeralPago', 'totalGeralPendente',
             'totalReceitas', 'saldo'
-        ));
+        );
     }
 }
