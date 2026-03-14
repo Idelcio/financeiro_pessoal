@@ -34,19 +34,23 @@
 <body>
 
 <div class="no-print">
-    <button class="btn" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button>
+    <button class="btn" onclick="window.print()">Imprimir / Salvar PDF</button>
     <button class="btn btn-outline" onclick="window.close()">Fechar</button>
 </div>
+
+@php
+    $mesesPt = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+    $mesCarbon = \Carbon\Carbon::createFromFormat('Y-m', $mes);
+    $catAtiva = $categoriaId ? $categorias->firstWhere('id', $categoriaId) : null;
+    $filtrando = $tipo !== 'todos' || $categoriaId;
+@endphp
 
 <h1>Gestor Financeiro</h1>
 <p class="subtitle">RELATÓRIO DE GASTOS</p>
 <p class="subtitle">
-    {{ \Carbon\Carbon::createFromFormat('Y-m', $mes)->translatedFormat('F \d\e Y') }}
+    {{ $mesesPt[$mesCarbon->month - 1] }} de {{ $mesCarbon->year }}
     @if($tipo !== 'todos') · {{ strtoupper($tipo) }} @endif
-    @if($categoriaId)
-        @php $catAtiva = $categorias->firstWhere('id', $categoriaId); @endphp
-        · {{ strtoupper($catAtiva?->nome ?? '') }}
-    @endif
+    @if($catAtiva) · {{ strtoupper($catAtiva->nome) }} @endif
 </p>
 <p class="subtitle" style="font-size:10px;color:#555;">Gerado em {{ now()->format('d/m/Y H:i') }}</p>
 
@@ -54,11 +58,22 @@
 
 {{-- RESUMO --}}
 <div class="section-title">Resumo</div>
+@if(!$filtrando)
 <div class="row"><span class="label">Entradas</span><span class="val">R$ {{ number_format($totalReceitas / 100, 2, ',', '.') }}</span></div>
 <div class="row"><span class="label">Gastos totais</span><span class="val">R$ {{ number_format($totalGeralMes / 100, 2, ',', '.') }}</span></div>
 <div class="row"><span class="label">Saldo</span><span class="val">{{ $saldo >= 0 ? '' : '-' }}R$ {{ number_format(abs($saldo) / 100, 2, ',', '.') }}</span></div>
 <div class="row"><span class="label">A pagar</span><span class="val">R$ {{ number_format($totalGeralPendente / 100, 2, ',', '.') }}</span></div>
+@elseif($categoriaId)
+<div class="row"><span class="label">Total {{ $catAtiva?->nome ?? 'categoria' }}</span><span class="val">R$ {{ number_format($totalAvulsosMes / 100, 2, ',', '.') }}</span></div>
+@else
+{{-- filtro por tipo --}}
+@php
+    $totalFiltrado = $totalFixosMes + $totalVeiculosMes + $totalAvulsosMes;
+@endphp
+<div class="row"><span class="label">Total {{ strtoupper($tipo) }}</span><span class="val">R$ {{ number_format($totalFiltrado / 100, 2, ',', '.') }}</span></div>
+@endif
 
+{{-- SEÇÕES SÓ APARECEM SEM FILTRO DE CATEGORIA --}}
 @if(!$categoriaId)
 
 {{-- GASTOS FIXOS --}}
@@ -79,8 +94,8 @@
 <div class="total-row"><span>Total fixos</span><span>R$ {{ number_format($totalFixosMes / 100, 2, ',', '.') }}</span></div>
 @endif
 
-{{-- CARTOES --}}
-@if($parcelasMes->isNotEmpty())
+{{-- CARTOES — só sem filtro de tipo --}}
+@if($tipo === 'todos' && $parcelasMes->isNotEmpty())
 <hr class="divider">
 <div class="section-title">Cartões de Crédito</div>
 @foreach($parcelasMes as $p)
@@ -120,8 +135,8 @@
 <div class="total-row"><span>Total veículos</span><span>R$ {{ number_format($totalVeiculosMes / 100, 2, ',', '.') }}</span></div>
 @endif
 
-{{-- IMPOSTOS --}}
-@if($totalImpostosMes > 0)
+{{-- IMPOSTOS — só sem filtro de tipo --}}
+@if($tipo === 'todos' && $totalImpostosMes > 0)
 <hr class="divider">
 <div class="section-title">Impostos (IPVA / IPTU)</div>
 @foreach($impostosDoMes as $parcela)
@@ -141,10 +156,15 @@
 {{-- GASTOS AVULSOS --}}
 @if($gastosAvulsosMes->isNotEmpty())
 <hr class="divider">
-<div class="section-title">Gastos Avulsos{{ $categoriaId && isset($catAtiva) ? ' · '.$catAtiva->nome : '' }}</div>
+<div class="section-title">Gastos Avulsos{{ $catAtiva ? ' · '.$catAtiva->nome : '' }}</div>
 @foreach($gastosAvulsosMes as $item)
 <div class="row">
-    <span class="label">{{ $item->descricao }}{{ $item->categoria ? ' <span class="sub">['.$item->categoria->nome.']</span>' : '' }}</span>
+    <span class="label">
+        {{ $item->descricao }}
+        @if($item->categoria && !$categoriaId)
+            <span class="sub">[{{ $item->categoria->nome }}]</span>
+        @endif
+    </span>
     <span class="val">R$ {{ number_format($item->valor_centavos / 100, 2, ',', '.') }}</span>
 </div>
 @endforeach
@@ -154,7 +174,13 @@
 <hr class="divider-solid">
 <div class="grand-total">
     <span>TOTAL GERAL</span>
-    <span>R$ {{ number_format($totalGeralMes / 100, 2, ',', '.') }}</span>
+    @if($categoriaId)
+        <span>R$ {{ number_format($totalAvulsosMes / 100, 2, ',', '.') }}</span>
+    @elseif($tipo !== 'todos')
+        <span>R$ {{ number_format(($totalFixosMes + $totalVeiculosMes + $totalAvulsosMes) / 100, 2, ',', '.') }}</span>
+    @else
+        <span>R$ {{ number_format($totalGeralMes / 100, 2, ',', '.') }}</span>
+    @endif
 </div>
 
 <p class="footer">gestor financeiro &mdash; {{ now()->format('d/m/Y H:i') }}</p>
