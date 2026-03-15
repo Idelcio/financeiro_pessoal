@@ -49,9 +49,12 @@ class NormalizeNumericInputs
         return $next($request);
     }
 
-    private function cleanMoney(mixed $value): string
+    private function cleanMoney(mixed $value): ?string
     {
         $v = trim((string) $value);
+        if ($v === '') {
+            return null;
+        }
         if (str_contains($v, ',')) {
             // Formato BR: 1.500,99 → 1500.99
             $v = str_replace('.', '', $v);
